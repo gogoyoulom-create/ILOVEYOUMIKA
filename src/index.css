@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&family=Caveat:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+@import "tailwindcss";
+
+/* Tailwind CSS v4 Theme Configurations */
+@theme {
+  --color-navy-darkest: #030712;
+  --color-navy-dark: #050b14;
+  --color-navy: #0a192f;
+  --color-navy-light: #172a45;
+  --color-navy-slate: #334155;
+
+  --color-cyan-glow: #00f0ff;
+  --color-cyan-soft: #64ffda;
+  --color-cyan-dark: #008b8b;
+
+  --font-sans: 'Outfit', sans-serif;
+  --font-handwritten: 'Caveat', cursive;
+  --font-serif: 'Playfair Display', serif;
+
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float-slow 8s ease-in-out infinite;
+  --animate-float-slower: float-slower 12s ease-in-out infinite;
+  --animate-twinkle: twinkle 4s ease-in-out infinite;
+  --animate-glitch: glitch 0.3s ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(0.5deg); }
+  }
+  @keyframes float-slower {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-22px) rotate(-1deg); }
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+  }
+  @keyframes glitch {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+  }
+}
+
+/* Base document configurations */
+html {
+  scroll-behavior: smooth;
+  background-color: #030712;
+  color: #f8fafc;
+  overflow-x: hidden;
+  font-family: 'Outfit', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #030712;
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #030712;
+}
+::-webkit-scrollbar-thumb {
+  background: #111827;
+  border-radius: 9999px;
+  border: 1px solid rgba(23, 42, 69, 0.45);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00f0ff;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+}
+
+/* Custom utilities for neon glows and glassmorphism */
+.glass {
+  background: rgba(5, 11, 20, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(23, 42, 69, 0.45);
+}
+
+.glass-glow {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4), 0 0 25px rgba(0, 240, 255, 0.05);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.6), 0 0 20px rgba(0, 240, 255, 0.3);
+}
+
+.text-glow-soft {
+  text-shadow: 0 0 8px rgba(100, 255, 218, 0.4);
+}
+
+.glow-border {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glow-border:hover {
+  border-color: rgba(0, 240, 255, 0.5);
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.15);
+}
+
+/* Custom glowing cursor background - flashlight effect */
+.custom-cursor-glow {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 500px;
+  height: 500px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.04) 0%, rgba(5, 11, 20, 0) 70%);
+  z-index: 40;
+  mix-blend-mode: screen;
+}
+
+/* Scrapbook Tape Accent */
+.tape-accent {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border-left: 1px dashed rgba(255, 255, 255, 0.1);
+  border-right: 1px dashed rgba(255, 255, 255, 0.1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Map beacon pulsing */
+@keyframes beacon-pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+    box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.8);
+  }
+  70% {
+    transform: scale(1.3);
+    opacity: 1;
+    box-shadow: 0 0 0 15px rgba(0, 240, 255, 0);
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+    box-shadow: 0 0 0 0 rgba(0, 240, 255, 0);
+  }
+}
+
+.beacon-glowing {
+  animation: beacon-pulse 3s infinite ease-in-out;
+}
+
+/* Custom mask fade overlays */
+.sky-fade-bottom {
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+
+.sky-fade-top {
+  mask-image: linear-gradient(to top, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 80%, transparent 100%);
+}
