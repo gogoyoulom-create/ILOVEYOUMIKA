@@ -152,7 +152,7 @@ export default function StarryBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-full h-full pointer-events-none z-0 bg-[#030712]"
+      className="fixed inset-0 w-full h-full pointer-events-none z-0 bg-transparent"
     />
   );
 }

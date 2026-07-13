@@ -43,7 +43,8 @@ export default function LoadingScreen({ onComplete }) {
           key="loader"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, y: -40, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }}
-          className="fixed inset-0 w-full h-full min-h-[100dvh] bg-[#030712] z-[9999] flex flex-col items-center justify-center select-none"
+          className="fixed inset-0 w-full h-full min-h-[100dvh] z-[9999] flex flex-col items-center justify-center select-none"
+          style={{ background: 'radial-gradient(circle at center, #083c20 0%, #020f09 100%)' }}
         >
           {/* Glowing Ambient Background Spot */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-cyan-glow/5 rounded-full filter blur-[60px]" />

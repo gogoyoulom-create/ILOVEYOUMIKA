@@ -91,7 +91,8 @@ export default function HiddenFeature() {
             animate={{ opacity: [0, 0.9, 0.4, 0.95, 0] }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.45 }}
-            className="fixed inset-0 w-full h-full bg-[#030712] z-[999] pointer-events-none border-4 border-rose-500/10 flex flex-col justify-center items-center"
+            className="fixed inset-0 w-full h-full z-[999] pointer-events-none border-4 border-rose-500/10 flex flex-col justify-center items-center"
+            style={{ background: 'radial-gradient(circle at center, #083c20 0%, #020f09 100%)' }}
           >
             {/* Scanline visual overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent pointer-events-none animate-pulse" />

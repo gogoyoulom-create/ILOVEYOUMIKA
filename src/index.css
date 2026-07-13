@@ -53,7 +53,7 @@
 /* Base document configurations */
 html {
   scroll-behavior: smooth;
-  background-color: #030712;
+  background-color: #020f09;
   color: #f8fafc;
   overflow-x: hidden;
   font-family: 'Outfit', sans-serif;
@@ -62,7 +62,7 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background-color: #030712;
+  background: radial-gradient(circle at center, #083c20 0%, #020f09 100%);
   min-height: 100vh;
 }
 
@@ -71,7 +71,7 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #030712;
+  background: #020f09;
 }
 ::-webkit-scrollbar-thumb {
   background: #111827;

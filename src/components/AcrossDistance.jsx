@@ -186,7 +186,7 @@ export default function AcrossDistance() {
               Mika
             </span>
             <span className="text-[10px] sm:text-[11px] font-mono text-cyan-soft mt-1 select-none whitespace-nowrap">
-              Germany • {germanyTime}
+              Duisburg • {germanyTime}
             </span>
           </div>
         </div>

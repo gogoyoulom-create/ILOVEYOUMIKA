@@ -21,17 +21,17 @@ const TRACKS = [
   {
     title: "Talking (Miss Westie)",
     artist: "North West",
-    url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+    url: "/talking.m4a"
   },
   {
     title: "Goggles",
     artist: "North West",
-    url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+    url: "/goggles.m4a"
   },
   {
     title: "Matthew",
     artist: "North West",
-    url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+    url: "/matthew.m4a"
   }
 ];
 
@@ -232,7 +232,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen min-h-[100dvh] text-slate-100 bg-[#030712] font-sans selection:bg-cyan-glow/20 selection:text-cyan-glow">
+    <div className="relative min-h-screen min-h-[100dvh] text-slate-100 bg-transparent font-sans selection:bg-cyan-glow/20 selection:text-cyan-glow">
       {/* 1. Cinematic Loading Screen */}
       <LoadingScreen onComplete={() => setIsLoading(false)} />
 
