@@ -1,7 +1,7 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, Upload, Trash2, Cloud, CloudOff, X, ExternalLink } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Camera, Upload, Trash2 } from 'lucide-react';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { supabase, getSupabaseConfig, reloadSupabaseClient } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
 
 // Helper defined in module scope to satisfy React 19 purity rules
 const getCacheBuster = () => new Date().getTime();
@@ -61,15 +61,8 @@ const POLAROID_DEFAULTS = [
 ];
 
 export default function OurLittleSpace() {
-  const [config, setConfig] = useState(() => getSupabaseConfig());
   const [images, setImages] = useState({ 1: null, 2: null, 3: null });
-  const [isCloudConnected, setIsCloudConnected] = useState(() => !!(supabase && config.url && config.key));
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [inputUrl, setInputUrl] = useState(() => config.url);
-  const [inputKey, setInputKey] = useState(() => config.key);
 
   const fileInputRefs = {
     1: useRef(null),
@@ -86,27 +79,25 @@ export default function OurLittleSpace() {
     setImages(loadedImages);
   }, []);
 
-  const loadCloudPhotos = useCallback(async (client) => {
+  const loadCloudPhotos = useCallback(async () => {
     setIsLoading(true);
     try {
       // List files in the 'polaroids' bucket
-      const { data: files, error } = await client.storage
+      const { data: files, error } = await supabase.storage
         .from('polaroids')
         .list('', { sortBy: { column: 'name', order: 'asc' } });
       
       if (error) {
         console.error('Error listing Supabase files:', error);
-        setIsCloudConnected(false);
         loadLocalPhotos();
         return;
       }
 
-      setIsCloudConnected(true);
       const cloudImages = {};
       for (let id = 1; id <= 3; id++) {
         const fileExists = files.some(f => f.name === `polaroid_${id}`);
         if (fileExists) {
-          const { data } = client.storage
+          const { data } = supabase.storage
             .from('polaroids')
             .getPublicUrl(`polaroid_${id}`);
           
@@ -120,25 +111,19 @@ export default function OurLittleSpace() {
       setImages(cloudImages);
     } catch (e) {
       console.error('Failed to load photos from cloud:', e);
-      setIsCloudConnected(false);
       loadLocalPhotos();
     } finally {
       setIsLoading(false);
     }
   }, [loadLocalPhotos]);
 
-  // Load photos on mount / config change
+  // Load photos on mount
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (supabase && config.url && config.key) {
-        loadCloudPhotos(supabase);
-      } else {
-        setIsCloudConnected(false);
-        loadLocalPhotos();
-      }
+      loadCloudPhotos();
     }, 0);
     return () => clearTimeout(timer);
-  }, [config.url, config.key, loadCloudPhotos, loadLocalPhotos]);
+  }, [loadCloudPhotos]);
 
   const handleCardClick = (id) => {
     if (isLoading) return;
@@ -151,36 +136,31 @@ export default function OurLittleSpace() {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (isCloudConnected && supabase) {
-      setIsLoading(true);
-      try {
-        // Upload to Supabase Storage (upsert = true allows overwriting)
-        const { error } = await supabase.storage
-          .from('polaroids')
-          .upload(`polaroid_${id}`, file, {
-            contentType: file.type,
-            upsert: true
-          });
+    setIsLoading(true);
+    try {
+      // Upload to Supabase Storage (upsert = true allows overwriting)
+      const { error } = await supabase.storage
+        .from('polaroids')
+        .upload(`polaroid_${id}`, file, {
+          contentType: file.type,
+          upsert: true
+        });
 
-        if (error) throw error;
+      if (error) throw error;
 
-        // Fetch new public URL
-        const { data } = supabase.storage
-          .from('polaroids')
-          .getPublicUrl(`polaroid_${id}`);
+      // Fetch new public URL
+      const { data } = supabase.storage
+        .from('polaroids')
+        .getPublicUrl(`polaroid_${id}`);
 
-        if (data?.publicUrl) {
-          const freshUrl = `${data.publicUrl}?t=${getCacheBuster()}`;
-          setImages((prev) => ({ ...prev, [id]: freshUrl }));
-        }
-      } catch (err) {
-        console.error('Supabase upload error:', err);
-        alert(`Failed to upload to cloud: ${err.message || err}. Make sure you created a public bucket named 'polaroids' and added policies!`);
-      } finally {
-        setIsLoading(false);
+      if (data?.publicUrl) {
+        const freshUrl = `${data.publicUrl}?t=${getCacheBuster()}`;
+        setImages((prev) => ({ ...prev, [id]: freshUrl }));
       }
-    } else {
-      // LocalStorage fallback
+    } catch (err) {
+      console.error('Supabase upload error:', err);
+      alert(`Failed to upload to cloud: ${err.message || err}. Make sure you created a public bucket named 'polaroids' and added policies!`);
+      // Fallback to local storage
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64String = reader.result;
@@ -188,6 +168,8 @@ export default function OurLittleSpace() {
         localStorage.setItem(`mika_polaroid_${id}`, base64String);
       };
       reader.readAsDataURL(file);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -195,70 +177,22 @@ export default function OurLittleSpace() {
     e.stopPropagation(); // Avoid triggering file selection
     if (isLoading) return;
     
-    if (isCloudConnected && supabase) {
-      setIsLoading(true);
-      try {
-        const { error } = await supabase.storage
-          .from('polaroids')
-          .remove([`polaroid_${id}`]);
-        
-        if (error) throw error;
-        setImages((prev) => ({ ...prev, [id]: null }));
-      } catch (err) {
-        console.error('Supabase delete error:', err);
-        alert(`Failed to delete from cloud: ${err.message || err}`);
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.storage
+        .from('polaroids')
+        .remove([`polaroid_${id}`]);
+      
+      if (error) throw error;
+      setImages((prev) => ({ ...prev, [id]: null }));
+    } catch (err) {
+      console.error('Supabase delete error:', err);
+      // Fallback to local storage
       setImages((prev) => ({ ...prev, [id]: null }));
       localStorage.removeItem(`mika_polaroid_${id}`);
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const handleSaveConfig = async (e) => {
-    e.preventDefault();
-    setIsSaving(true);
-
-    if (inputUrl.trim() && inputKey.trim()) {
-      localStorage.setItem('mika_supabase_url', inputUrl.trim());
-      localStorage.setItem('mika_supabase_anon_key', inputKey.trim());
-    } else {
-      localStorage.removeItem('mika_supabase_url');
-      localStorage.removeItem('mika_supabase_anon_key');
-    }
-
-    // Reload client
-    const newClient = reloadSupabaseClient();
-    const newConfig = getSupabaseConfig();
-    
-    setConfig(newConfig);
-    setInputUrl(newConfig.url);
-    setInputKey(newConfig.key);
-
-    if (newClient && newConfig.url && newConfig.key) {
-      await loadCloudPhotos(newClient);
-    } else {
-      setIsCloudConnected(false);
-      loadLocalPhotos();
-    }
-    
-    setIsSaving(false);
-    setIsModalOpen(false);
-  };
-
-  const handleClearConfig = () => {
-    localStorage.removeItem('mika_supabase_url');
-    localStorage.removeItem('mika_supabase_anon_key');
-    setInputUrl('');
-    setInputKey('');
-    
-    reloadSupabaseClient();
-    const newConfig = getSupabaseConfig();
-    setConfig(newConfig);
-    setIsCloudConnected(false);
-    loadLocalPhotos();
-    setIsModalOpen(false);
   };
 
   return (
@@ -292,34 +226,8 @@ export default function OurLittleSpace() {
           whileInView={{ width: "40px" }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1, delay: 0.3 }}
-          className="h-[1px] bg-cyan-glow/40 mx-auto mb-4"
+          className="h-[1px] bg-cyan-glow/40 mx-auto"
         />
-
-        {/* Cloud Sync Status Indicator */}
-        <motion.button
-          onClick={() => setIsModalOpen(true)}
-          initial={{ opacity: 0, y: 5 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-          className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] tracking-widest uppercase border transition-all duration-300 backdrop-blur-sm cursor-pointer select-none ${
-            isCloudConnected 
-              ? 'text-cyan-soft border-cyan-soft/30 hover:border-cyan-soft/60 bg-cyan-glow/5 hover:bg-cyan-glow/10 shadow-[0_0_12px_rgba(0,240,255,0.15)]' 
-              : 'text-slate-400 border-slate-700/50 hover:border-slate-500 hover:text-slate-200 bg-slate-950/40'
-          }`}
-        >
-          {isCloudConnected ? (
-            <>
-              <Cloud size={12} className="text-cyan-soft animate-pulse" />
-              <span>Cloud Connected</span>
-            </>
-          ) : (
-            <>
-              <CloudOff size={12} className="text-slate-500" />
-              <span>Local Storage (Offline)</span>
-            </>
-          )}
-        </motion.button>
       </div>
 
       {/* Scrapbook Board Container */}
@@ -446,164 +354,6 @@ export default function OurLittleSpace() {
           })}
         </div>
       </div>
-
-      {/* Cloud Connection Configuration Modal */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
-            onClick={() => setIsModalOpen(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.95, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.95, y: 20 }}
-              transition={{ type: "spring", duration: 0.5 }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-lg rounded-xl border border-slate-800/80 glass glass-glow p-6 text-slate-100 flex flex-col gap-5 overflow-y-auto max-h-[90vh]"
-            >
-              {/* Modal Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-slate-800/60">
-                <div className="flex items-center gap-2">
-                  <Cloud className="text-cyan-glow animate-pulse" size={20} />
-                  <h3 className="font-serif text-lg font-light tracking-wide text-slate-200">
-                    Sync to Cloud Space
-                  </h3>
-                </div>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="p-1 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 transition-colors cursor-pointer"
-                >
-                  <X size={16} />
-                </button>
-              </div>
-
-              {/* Status Banner */}
-              <div className={`p-4 rounded-lg border text-xs leading-relaxed ${
-                isCloudConnected
-                  ? 'bg-cyan-950/10 border-cyan-500/20 text-cyan-200/90'
-                  : 'bg-slate-950/40 border-slate-800 text-slate-400'
-              }`}>
-                {isCloudConnected ? (
-                  <p>
-                    ✨ <strong>Connected!</strong> Your pictures are stored in the cloud. Changes made here will instantly sync and display when you or Mika open the site on any phone, tablet, or laptop.
-                  </p>
-                ) : (
-                  <p>
-                    🔒 <strong>Currently Offline (Local Mode).</strong> Photos are saved only on this browser/device. To sync them across all devices, follow the guide below to set up a free Supabase server.
-                  </p>
-                )}
-              </div>
-
-              {/* Step-by-Step Guide */}
-              <div className="text-xs text-slate-400 flex flex-col gap-3">
-                <span className="font-semibold uppercase tracking-wider text-slate-300 font-sans text-[10px]">
-                  Setup Guide (Takes 3 mins)
-                </span>
-                <ol className="list-decimal list-inside flex flex-col gap-2 leading-relaxed">
-                  <li>
-                    Create a free account at{' '}
-                    <a
-                      href="https://supabase.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-cyan-soft hover:underline inline-flex items-center gap-0.5"
-                    >
-                      supabase.com <ExternalLink size={10} />
-                    </a>{' '}
-                    and spin up a new project.
-                  </li>
-                  <li>
-                    Go to <strong>Storage</strong> in the left sidebar, click <strong>New Bucket</strong>, name it exactly <code className="text-cyan-glow px-1.5 py-0.5 rounded bg-slate-950/60 font-mono">polaroids</code>, and make it <strong>Public</strong>.
-                  </li>
-                  <li>
-                    Click on your new bucket, go to <strong>Policies</strong>, click <strong>New Policy</strong>, and choose **Allow access to everyone** (Select, Insert, Update, Delete) to allow public access.
-                  </li>
-                  <li>
-                    Copy your <strong>Project URL</strong> and <strong>Anon Public Key</strong> from Project Settings → API, and enter them below:
-                  </li>
-                </ol>
-              </div>
-
-              {/* Configuration Form */}
-              <form onSubmit={handleSaveConfig} className="flex flex-col gap-4">
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] tracking-widest uppercase font-semibold text-slate-400">
-                    Supabase Project URL
-                  </label>
-                  <input
-                    type="url"
-                    required
-                    disabled={config.isEnv}
-                    value={inputUrl}
-                    onChange={(e) => setInputUrl(e.target.value)}
-                    placeholder="https://xxxxxx.supabase.co"
-                    className="w-full px-3 py-2 text-xs rounded border border-slate-800/80 bg-slate-950/60 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-cyan-glow/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-mono"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] tracking-widest uppercase font-semibold text-slate-400">
-                    Supabase Anon API Key
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    disabled={config.isEnv}
-                    value={inputKey}
-                    onChange={(e) => setInputKey(e.target.value)}
-                    placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6..."
-                    className="w-full px-3 py-2 text-xs rounded border border-slate-800/80 bg-slate-950/60 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-cyan-glow/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-mono"
-                  />
-                </div>
-
-                {config.isEnv && (
-                  <p className="text-[10px] text-cyan-soft/60 italic leading-snug">
-                    ℹ️ Keys are locked because they are loaded from your system's .env file.
-                  </p>
-                )}
-
-                {/* Form Buttons */}
-                <div className="flex items-center justify-between gap-4 pt-3 border-t border-slate-800/60 mt-2">
-                  {!config.isEnv && (config.url || config.key) ? (
-                    <button
-                      type="button"
-                      onClick={handleClearConfig}
-                      className="px-3 py-2 rounded text-xs text-rose-400 hover:bg-rose-950/20 hover:text-rose-300 transition-colors cursor-pointer"
-                    >
-                      Disconnect Cloud
-                    </button>
-                  ) : (
-                    <div />
-                  )}
-                  
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setIsModalOpen(false)}
-                      className="px-3 py-2 rounded text-xs text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
-                    >
-                      Cancel
-                    </button>
-                    {!config.isEnv && (
-                      <button
-                        type="submit"
-                        disabled={isSaving}
-                        className="px-4 py-2 rounded text-xs font-medium text-slate-950 bg-cyan-soft hover:bg-cyan-glow transition-all hover:scale-[1.02] shadow-[0_0_15px_rgba(100,255,218,0.25)] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {isSaving ? 'Connecting...' : 'Save & Connect'}
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </form>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }
