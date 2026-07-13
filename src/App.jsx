@@ -53,42 +53,6 @@ export default function App() {
   const rainAudioContextRef = useRef(null);
   const rainSourceNodeRef = useRef(null);
 
-  // Initialize and manage persistent background music audio element
-  useEffect(() => {
-    const audio = new Audio(TRACKS[currentTrackIndex].url);
-    audio.volume = volume;
-    audio.loop = false; // Auto-advance to next song
-    audioRef.current = audio;
-
-    const handlePlay = () => setIsPlaying(true);
-    const handlePause = () => setIsPlaying(false);
-    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
-    const handleLoadedMetadata = () => setDuration(audio.duration);
-    const handleEnded = () => handleNextTrack();
-
-    audio.addEventListener('play', handlePlay);
-    audio.addEventListener('pause', handlePause);
-    audio.addEventListener('timeupdate', handleTimeUpdate);
-    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
-    audio.addEventListener('ended', handleEnded);
-
-    return () => {
-      audio.pause();
-      audio.removeEventListener('play', handlePlay);
-      audio.removeEventListener('pause', handlePause);
-      audio.removeEventListener('timeupdate', handleTimeUpdate);
-      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      audio.removeEventListener('ended', handleEnded);
-    };
-  }, [currentTrackIndex]);
-
-  // Sync volume adjustments
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume;
-    }
-  }, [volume]);
-
   const handlePlayPause = () => {
     if (!audioRef.current) return;
     if (isPlaying) {
@@ -135,6 +99,43 @@ export default function App() {
     }
   };
 
+  // Initialize and manage persistent background music audio element
+  useEffect(() => {
+    const audio = new Audio(TRACKS[currentTrackIndex].url);
+    audio.volume = volume;
+    audio.loop = false; // Auto-advance to next song
+    audioRef.current = audio;
+
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
+    const handleLoadedMetadata = () => setDuration(audio.duration);
+    const handleEnded = () => handleNextTrack();
+
+    audio.addEventListener('play', handlePlay);
+    audio.addEventListener('pause', handlePause);
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+    audio.addEventListener('ended', handleEnded);
+
+    return () => {
+      audio.pause();
+      audio.removeEventListener('play', handlePlay);
+      audio.removeEventListener('pause', handlePause);
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.removeEventListener('ended', handleEnded);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentTrackIndex]);
+
+  // Sync volume adjustments
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, [volume]);
+
   // --- Rain sound synthesis via Web Audio API ---
   const toggleRainSound = () => {
     if (isRainPlaying) {
@@ -142,7 +143,7 @@ export default function App() {
       if (rainSourceNodeRef.current) {
         try {
           rainSourceNodeRef.current.stop();
-        } catch (e) {
+        } catch {
           // already stopped
         }
         rainSourceNodeRef.current = null;

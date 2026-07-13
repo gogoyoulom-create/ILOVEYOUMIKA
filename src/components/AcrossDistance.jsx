@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Heart, Compass, Moon } from 'lucide-react';
+import { Heart, Moon } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function AcrossDistance() {
