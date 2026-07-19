@@ -12,6 +12,7 @@ import ThingsAboutYou from './components/ThingsAboutYou';
 import AcrossDistance from './components/AcrossDistance';
 import OurLittleSpace from './components/OurLittleSpace';
 import LateNightThoughts from './components/LateNightThoughts';
+import OpenWhenLetters from './components/OpenWhenLetters';
 import HiddenFeature from './components/HiddenFeature';
 import MusicPlayer from './components/MusicPlayer';
 import Footer from './components/Footer';
@@ -273,7 +274,10 @@ export default function App() {
                 {/* 4. Late Night Thoughts Cinematic Message Box */}
                 <LateNightThoughts />
 
-                {/* 5. Playful Hidden Feature Warning Button */}
+                {/* 5. Open When Letters */}
+                <OpenWhenLetters />
+
+                {/* 6. Playful Hidden Feature Warning Button */}
                 <HiddenFeature />
 
                 {/* 6. Spotify Inspired Music Controller */}
