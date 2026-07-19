@@ -17,6 +17,7 @@ import OpenWhenLetters from './components/OpenWhenLetters';
 import HiddenFeature from './components/HiddenFeature';
 import MusicPlayer from './components/MusicPlayer';
 import Footer from './components/Footer';
+import MewCard from './components/MewCard';
 
 // Soothing Spotify playlists tracks
 const TRACKS = [
@@ -300,6 +301,9 @@ export default function App() {
                   isRainPlaying={isRainPlaying}
                   onToggleRain={toggleRainSound}
                 />
+
+                {/* Mew ex 151 Card */}
+                <MewCard />
 
                 {/* 7. Minimal Ending Scene Footer */}
                 <Footer />
