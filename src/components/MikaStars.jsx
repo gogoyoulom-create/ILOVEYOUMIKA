@@ -1,4 +1,4 @@
-﻿import { motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const SPARKLES = [
   { id: 's1',  cx: -10, cy: 8,   r: 1.2, d: 2.5, dl: 0.3 },
@@ -32,7 +32,7 @@ export default function MikaStars() {
       transition={{ duration: 2, delay: 2.5 }}
       style={{
         position: 'fixed',
-        right: '16px',
+        right: '4px',
         top: '50%',
         transform: 'translateY(-50%) rotate(-14deg)',
         zIndex: 30,
