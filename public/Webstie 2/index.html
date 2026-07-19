@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Retro Cinematic Love Story</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Retro Screen Wrapper (Aspect-Locked 16:9 Screen) -->
+  <div id="screen-wrapper">
+    
+    <!-- CRT TV Screen Effect Overlays -->
+    <div id="crt-overlay"></div>
+
+    <!-- HTML5 Pixel-Art Canvas -->
+    <canvas id="game-canvas" width="480" height="270"></canvas>
+
+    <!-- Subtitle/Lyric HUD -->
+    <div id="subtitle-box">
+      <div class="song-label" id="subtitle-song-name">Now Playing</div>
+      <div class="lyric-text" id="subtitle-text">Memory merge loading...</div>
+    </div>
+
+    <!-- Scene 0: Landing / Title Screen Overlay -->
+    <div id="landing-screen" class="overlay-screen">
+      <div id="title-container">
+        <h1 class="game-title">AN INDIE<br><span>LOVE STORY</span></h1>
+        <p class="subtitle">An interactive 2D pixel-art music adventure</p>
+        
+        <button class="btn-start" id="btn-start-game">START STORY</button>
+      </div>
+    </div>
+
+
+
+  </div>
+
+  <!-- Game Scripts -->
+  <script src="pixel_renderer.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

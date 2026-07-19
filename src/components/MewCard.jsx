@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Sparkles } from 'lucide-react';
 
 const CARD_DATA = {
@@ -12,6 +12,30 @@ const CARD_DATA = {
 
 export default function MewCard() {
   const cardRef = useRef(null);
+  const [clickCount, setClickCount] = useState(0);
+  const clickTimeoutRef = useRef(null);
+
+  const handleClick = () => {
+    setClickCount((prev) => {
+      const next = prev + 1;
+      if (next >= 3) {
+        window.location.href = './Webstie 2/index.html';
+        return 0;
+      }
+      return next;
+    });
+
+    if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    clickTimeoutRef.current = setTimeout(() => {
+      setClickCount(0);
+    }, 1500);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    };
+  }, []);
 
   const handleMouseMove = (e) => {
     if (!cardRef.current) return;
@@ -71,6 +95,15 @@ export default function MewCard() {
           border: 1px solid rgba(255, 255, 255, 0.08);
           background-color: #0b1524;
         }
+        @keyframes card-shake {
+          0%, 100% { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); }
+          25% { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translate(-2px, 1px) rotate(-1deg); }
+          50% { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translate(2px, -1px) rotate(1deg); }
+          75% { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translate(-1px, -1px) rotate(0.5deg); }
+        }
+        .animate-shake {
+          animation: card-shake 0.15s ease-in-out infinite;
+        }
       `}} />
 
       {/* Section Title */}
@@ -86,17 +119,21 @@ export default function MewCard() {
         </h2>
         <div className="h-[1px] w-8 bg-cyan-glow/30 mx-auto mb-4" />
         <p className="text-slate-400 text-xs max-w-xs mx-auto leading-relaxed">
-          A holographic Mew ex card to keep you company. Hover to shine.
+          A holographic Mew ex card to keep you company. Hover to shine... is there a secret hidden inside?
         </p>
       </div>
 
       {/* 3D Pokemon Card Container */}
-      <div className="tcg-perspective relative group cursor-default mb-8">
+      <div className="tcg-perspective relative group cursor-pointer mb-8">
         <div
           ref={cardRef}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          className={`tcg-card-inner rounded-[14px] ${CARD_DATA.themeGlow} hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)]`}
+          onClick={handleClick}
+          className={`tcg-card-inner rounded-[14px] ${CARD_DATA.themeGlow} hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)]
+            ${clickCount === 1 ? 'shadow-[0_0_20px_#00f0ff] border-cyan-glow/40 scale-[0.98]' : ''}
+            ${clickCount === 2 ? 'shadow-[0_0_35px_#f43f5e] border-rose-500/50 scale-[0.96] animate-shake' : ''}
+          `}
         >
           {/* Card Front Face */}
           <div className="tcg-card-front select-none">

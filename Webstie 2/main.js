@@ -113,6 +113,7 @@ const APP = {
   analyser: null,
   frequencyData: null,
   endingFadeAlpha: 0, // Opacity of ending black overlay
+  isRedirecting: false,
   
   // Characters and props coordinates/states
   girl: { x: 256, y: 210, breathing: true, blinking: false, surprised: false, blush: false, blinkTimer: 120 },
@@ -671,6 +672,14 @@ function updateStateMachines() {
           if (APP.synthInterval) clearInterval(APP.synthInterval);
           APP.isPlaying = false;
         }
+      }
+
+      // Redirect back to original website once fade animation ends
+      if (APP.endingFadeAlpha >= 1.0 && !APP.isRedirecting) {
+        APP.isRedirecting = true;
+        setTimeout(() => {
+          window.location.href = '../';
+        }, 1500); // Wait 1.5s on black screen before redirecting
       }
       break;
   }
