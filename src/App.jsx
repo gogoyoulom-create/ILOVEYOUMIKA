@@ -11,6 +11,7 @@ import Hero from './components/Hero';
 import ThingsAboutYou from './components/ThingsAboutYou';
 import AcrossDistance from './components/AcrossDistance';
 import OurLittleSpace from './components/OurLittleSpace';
+import MikaStars from './components/MikaStars';
 import LateNightThoughts from './components/LateNightThoughts';
 import OpenWhenLetters from './components/OpenWhenLetters';
 import HiddenFeature from './components/HiddenFeature';
@@ -271,7 +272,10 @@ export default function App() {
                 {/* 3. Our Little Space Polaroid Scrapbook */}
                 <OurLittleSpace />
 
-                {/* 4. Late Night Thoughts Cinematic Message Box */}
+                {/* 4. Mika — Name Written in the Stars */}
+                <MikaStars />
+
+                {/* 5. Late Night Thoughts Cinematic Message Box */}
                 <LateNightThoughts />
 
                 {/* 5. Open When Letters */}
