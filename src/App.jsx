@@ -245,6 +245,9 @@ export default function App() {
       {/* 3. Ambient Cursor Spotlight flashlight effect */}
       <CursorGlow />
 
+      {/* 4. Mika constellation — fixed right side */}
+      <MikaStars />
+
       {!isLoading && (
         <div className="relative w-full flex flex-col items-center">
           
@@ -272,10 +275,7 @@ export default function App() {
                 {/* 3. Our Little Space Polaroid Scrapbook */}
                 <OurLittleSpace />
 
-                {/* 4. Mika — Name Written in the Stars */}
-                <MikaStars />
-
-                {/* 5. Late Night Thoughts Cinematic Message Box */}
+                {/* 4. Late Night Thoughts Cinematic Message Box */}
                 <LateNightThoughts />
 
                 {/* 5. Open When Letters */}
