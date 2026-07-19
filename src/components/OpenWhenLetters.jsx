@@ -55,7 +55,7 @@ const LETTERS = [
     accentColor: '#00f0ff',
     messages: [
       "Hey, I miss you too. Whatever you're feeling right now, that pull, that ache, I feel it from here. Distance is weird like that. It makes you realize how much someone actually matters.\n\nBut guess what. Every mile between us is just proof of how real this is. I'm not going anywhere. I'm right here, just in a different time zone.",
-      "You thought of me. That just made my whole day honestly.\n\nI think about you more than I say. In the quiet in-between moments, music or sunsets or something funny that happened, my first thought is always that I want to tell you. That's you. You live in my little everyday moments.",
+      "You thought of me. That just made my whole day honestly.\n\nI think about you more than I say. In the quiet in between moments, music or sunsets or something funny that happened, my first thought is always that I want to tell you. That's you. You live in my little everyday moments.",
       "Missing someone is proof they mattered. And you matter to me a ridiculous amount.\n\nClose your eyes for a second. Breathe. I'm right there with you in whatever quiet you can find. We're looking at the same sky. We're more connected than the distance makes it feel. I promise."
     ]
   },
