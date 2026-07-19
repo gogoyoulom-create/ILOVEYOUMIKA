@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, X, Heart } from 'lucide-react';
 
@@ -12,9 +12,9 @@ const LETTERS = [
     glowColor: 'rgba(99, 102, 241, 0.15)',
     accentColor: '#818cf8',
     messages: [
-      "Hey. I know right now everything feels heavy, and that's okay. You don't have to pretend to be fine. But I need you to know — I think about you in quiet moments and every single time, I smile. You make this world softer just by being in it.\n\nSadness is just love with nowhere to go right now. Let it pass through you. I'm here, even from far away.",
-      "You're allowed to cry. You're allowed to feel it all. But please don't forget — you are the kind of person who makes other people feel seen and heard just by existing. That's rare. That's you.\n\nThings will feel lighter soon. Until then, I'm sending you the warmest, quietest hug. You're not alone in this.",
-      "I wish I could be there right now to sit next to you in silence or say something stupid to make you laugh. Since I can't — just know that somewhere, someone is thinking about you with so much warmth it's almost embarrassing.\n\nYou'll get through this. You always do. And I'll be here when you come out the other side."
+      "Hey. I know right now everything feels heavy and that's okay. You don't have to pretend to be fine. But I need you to know, I think about you in quiet moments and every single time I smile. You make this world softer just by being in it.\n\nSadness is just love with nowhere to go right now. Let it pass through you. I'm here, even from far away.",
+      "You're allowed to cry. You're allowed to feel it all. But please don't forget, you are the kind of person who makes other people feel seen and heard just by existing. That's rare. That's you.\n\nThings will feel lighter soon. Until then I'm sending you the warmest quietest hug. You're not alone in this.",
+      "I wish I could be there right now to sit next to you in silence or say something stupid to make you laugh. Since I can't, just know that somewhere someone is thinking about you with so much warmth it's almost embarrassing.\n\nYou'll get through this. You always do. And I'll be here when you come out the other side."
     ]
   },
   {
@@ -26,9 +26,9 @@ const LETTERS = [
     glowColor: 'rgba(251, 191, 36, 0.15)',
     accentColor: '#fbbf24',
     messages: [
-      "YES. Look at you, happy and glowing! This is your natural state, you know? This lightness, this ease — it suits you perfectly. Don't let anyone dim it.\n\nI love when you're happy. The world genuinely looks better when you're okay. Enjoy every single second of it. You deserve it all.",
-      "A happy you is my favorite you. Okay, all versions of you are my favorite — but a happy you? That hits different.\n\nKeep riding this wave. You've earned it. Go do something fun, be a little silly, laugh too loud. You have my full permission.",
-      "Something good happened and you remembered this? That's adorable. I'm so glad you're smiling right now.\n\nPlease save this feeling somewhere safe inside you. On the harder days, come back to this moment and remember: you are capable of feeling this good. It will always come back."
+      "YES. Look at you, happy and glowing! This is your natural state you know? This lightness, this ease, it suits you perfectly. Don't let anyone dim it.\n\nI love when you're happy. The world genuinely looks better when you're okay. Enjoy every single second of it. You deserve it all.",
+      "A happy you is my favorite you. Okay all versions of you are my favorite but a happy you? That hits different.\n\nKeep riding this wave. You've earned it. Go do something fun, be a little silly, laugh too loud. You have my full permission.",
+      "Something good happened and you remembered this? That's adorable. I'm so glad you're smiling right now.\n\nPlease save this feeling somewhere safe inside you. On the harder days come back to this moment and remember, you are capable of feeling this good. It will always come back."
     ]
   },
   {
@@ -40,9 +40,9 @@ const LETTERS = [
     glowColor: 'rgba(244, 63, 94, 0.15)',
     accentColor: '#fb7185',
     messages: [
-      "Stop. I need you to hear this: you are so, so enough. More than enough. You've been measuring yourself against a standard that doesn't exist, and I hate that for you.\n\nThe way you care about things, the way your mind works, the way you love — these things are not small. They are everything. Please be a little kinder to yourself today.",
-      "I know your brain is lying to you right now. It does that sometimes. But I've seen you — really seen you — and what I see is someone who gives everything they have, who feels deeply, who tries even when it's hard.\n\nThat's not 'not enough.' That's more than most people will ever be. You are more than enough, always.",
-      "Whoever or whatever made you feel this way today was wrong. Full stop.\n\nYou bring something to this world that no one else can replicate. Your specific flavor of kindness, your laugh, the weird things you notice, the way you make people feel — that's irreplaceable. The world would be genuinely missing something without you in it."
+      "Stop. I need you to hear this. You are so so enough. More than enough. You've been measuring yourself against some standard that doesn't even exist and I hate that for you.\n\nThe way you care about things, the way your mind works, the way you love, none of that is small. It's everything. Please be a little kinder to yourself today.",
+      "I know your brain is lying to you right now. It does that sometimes. But I've seen you, really seen you, and what I see is someone who gives everything they have, who feels deeply, who tries even when it's hard.\n\nThat's not not enough. That's more than most people will ever be. You are more than enough, always.",
+      "Whoever made you feel this way today was wrong. Full stop.\n\nYou bring something to this world that no one else can replicate. Your kindness, your laugh, the weird things you notice, the way you make people feel. That's irreplaceable. The world would genuinely be missing something without you in it."
     ]
   },
   {
@@ -54,8 +54,8 @@ const LETTERS = [
     glowColor: 'rgba(0, 240, 255, 0.12)',
     accentColor: '#00f0ff',
     messages: [
-      "Hey, I miss you too. Whatever you're feeling right now — that pull, that ache — I feel it from here. Distance is weird like that. It makes you realize how much someone matters.\n\nBut guess what? Every mile between us is just proof of how real this is. I'm not going anywhere. I'm right here, just... in a different time zone.",
-      "You thought of me. That just made my whole day, honestly.\n\nI think about you more than I say. In the in-between moments — music, sunsets, something funny that happened — my first thought is always: I want to tell you this. That's you. You live in my little everyday moments.",
+      "Hey, I miss you too. Whatever you're feeling right now, that pull, that ache, I feel it from here. Distance is weird like that. It makes you realize how much someone actually matters.\n\nBut guess what. Every mile between us is just proof of how real this is. I'm not going anywhere. I'm right here, just in a different time zone.",
+      "You thought of me. That just made my whole day honestly.\n\nI think about you more than I say. In the quiet in-between moments, music or sunsets or something funny that happened, my first thought is always that I want to tell you. That's you. You live in my little everyday moments.",
       "Missing someone is proof they mattered. And you matter to me a ridiculous amount.\n\nClose your eyes for a second. Breathe. I'm right there with you in whatever quiet you can find. We're looking at the same sky. We're more connected than the distance makes it feel. I promise."
     ]
   },
@@ -68,9 +68,9 @@ const LETTERS = [
     glowColor: 'rgba(52, 211, 153, 0.15)',
     accentColor: '#34d399',
     messages: [
-      "I KNEW IT. I knew you could do it. Honestly, were you even surprised? Because I wasn't.\n\nYou work hard, you care, you push through even when you don't feel like it. This moment? You earned every single bit of it. Celebrate yourself. You deserve the applause.",
-      "Look at you go!! I'm so proud it's actually kind of annoying how proud I am.\n\nSeriously though — remember this feeling. You did a hard thing. Or maybe it wasn't even hard for you and that's the point — you're just that good. Either way: YES. That's you. That's all you.",
-      "Something in me just wanted to cheer out loud reading this.\n\nYou did something great and I want you to sit with that for longer than you normally would. Don't move on too fast. Don't already be thinking about the next thing. Just for right now — be proud of yourself. You've earned it completely."
+      "I KNEW IT. I knew you could do it. Honestly were you even surprised? Because I wasn't.\n\nYou work hard, you care, you push through even when you don't feel like it. This moment? You earned every single bit of it. Celebrate yourself. You deserve it.",
+      "Look at you go!! I'm so proud it's actually kind of annoying how proud I am.\n\nSeriously though, remember this feeling. You did a hard thing. Or maybe it wasn't even hard for you and that's the whole point, you're just that good. Either way YES. That's you. That's all you.",
+      "Something in me just wanted to cheer out loud when I read this.\n\nYou did something great and I want you to sit with that for longer than you normally would. Don't move on too fast. Don't already be thinking about the next thing. Just for right now, be proud of yourself. You've earned it completely."
     ]
   },
   {
@@ -82,9 +82,9 @@ const LETTERS = [
     glowColor: 'rgba(139, 92, 246, 0.15)',
     accentColor: '#a78bfa',
     messages: [
-      "It's late and your brain won't quiet down. I know. Mine does that too.\n\nHere's something to think about instead: somewhere, someone is thinking of you with the softest kind of warmth. That's me. You are so genuinely cared for, even in the 3am dark where it doesn't always feel that way. Rest now. Tomorrow will be a little easier.",
-      "You're awake again. The night is too big and your thoughts are too loud.\n\nTry this: breathe in slowly, breathe out slower. Think of one good thing that happened today — even something tiny. The world is quieter at this hour. Let it hold you for a bit. You don't have to figure everything out tonight.",
-      "The fact that you opened this at whatever-o'clock-it-is tells me your brain is being chaotic again.\n\nYou're okay. You're safe. Nothing needs solving right now. I hope you find a comfortable spot and just let the night be gentle with you. Dream of something beautiful. You deserve rest. I'll be here in the morning too."
+      "It's late and your brain won't quiet down. I know. Mine does that too.\n\nHere's something to think about instead. Somewhere someone is thinking of you with the softest kind of warmth. That's me. You are so genuinely cared for, even in the 3am dark where it doesn't always feel that way. Rest now. Tomorrow will be a little easier.",
+      "You're awake again. The night feels too big and your thoughts are too loud.\n\nTry this, breathe in slowly and breathe out slower. Think of one good thing that happened today, even something tiny. The world is quieter at this hour. Let it hold you for a bit. You don't have to figure everything out tonight.",
+      "The fact that you opened this at whatever time it is tells me your brain is being chaotic again.\n\nYou're okay. You're safe. Nothing needs solving right now. I hope you find a comfortable spot and just let the night be gentle with you. Dream of something beautiful. You deserve rest. I'll be here in the morning too."
     ]
   },
 ];
